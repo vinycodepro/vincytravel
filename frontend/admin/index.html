@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - VincyWeb Travel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-panel {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .admin-container {
+            display: flex;
+            margin-top: 70px;
+        }
+        
+        .admin-sidebar {
+            background: white;
+            width: 250px;
+            height: calc(100vh - 70px);
+            position: fixed;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: calc(100% - 250px);
+        }
+        
+        .admin-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-menu li {
+            margin: 0;
+        }
+        
+        .admin-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #374151;
+            transition: all 0.3s;
+            gap: 0.75rem;
+        }
+        
+        .admin-menu a:hover,
+        .admin-menu a.active {
+            background: #eff6ff;
+            color: #2563eb;
+            border-right: 3px solid #2563eb;
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 0;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-pending { color: #f59e0b; }
+        .status-confirmed { color: #10b981; }
+        .status-cancelled { color: #ef4444; }
+    </style>
+</head>
+<body class="admin-panel">
+    <!-- Admin Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>VincyWeb Admin</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">
+                    <i class="fas fa-arrow-left"></i> Back to Site
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-sidebar">
+            <ul class="admin-menu">
+                <li><a href="#dashboard" class="active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a></li>
+                <li><a href="#destinations" onclick="showSection('destinations')">
+                    <i class="fas fa-map-marker-alt"></i> Destinations
+                </a></li>
+                <li><a href="#packages" onclick="showSection('packages')">
+                    <i class="fas fa-suitcase"></i> Packages
+                </a></li>
+                <li><a href="#blog" onclick="showSection('blog')">
+                    <i class="fas fa-blog"></i> Blog Posts
+                </a></li>
+                <li><a href="#comments" onclick="showSection('comments')">
+                    <i class="fas fa-comments"></i> Comments
+                </a></li>
+                <li><a href="#bookings" onclick="showSection('bookings')">
+                    <i class="fas fa-calendar-check"></i> Bookings
+                </a></li>
+                <li><a href="#settings" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a></li>
+            </ul>
+        </div>
+
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="admin-section active">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Bookings</h3>
+                        <p id="totalBookings">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Comments</h3>
+                        <p id="pendingComments">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Packages</h3>
+                        <p id="activePackages">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Blog Posts</h3>
+                        <p id="totalPosts">0</p>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <h3>Quick Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <button class="btn-primary" onclick="showSection('destinations')">
+                            <i class="fas fa-plus"></i> Add Destination
+                        </button>
+                        <button class="btn-primary" onclick="showSection('packages')">
+                            <i class="fas fa-plus"></i> Add Package
+                        </button>
+                        <button class="btn-primary" onclick="showSection('blog')">
+                            <i class="fas fa-plus"></i> Add Blog Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destinations Management -->
+            <div id="destinations" class="admin-section">
+                <h2>Manage Destinations</h2>
+                
+                <div class="form-container">
+                    <h3>Add New Destination</h3>
+                    <form id="destinationForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Destination Name</label>
+                                <input type="text" id="destName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="destLocation" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="destDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="text" id="destImage" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Price Range</label>
+                                <select id="destPriceRange" required>
+                                    <option value="Budget">Budget</option>
+                                    <option value="Moderate">Moderate</option>
+                                    <option value="Luxury">Luxury</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Best Time to Visit</label>
+                                <input type="text" id="destBestTime">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="destFeatured"> Featured Destination
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Add Destination</button>
+                    </form>
+                </div>
+
+                <div class="table-container">
+                    <h3>Existing Destinations</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Price Range</th>
+                                <th>Featured</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="destinationsTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Loading destinations...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add similar sections for Packages, Blog, Comments, Bookings -->
+            <div id="packages" class="admin-section">
+                <h2>Manage Travel Packages</h2>
+                <div class="form-container">
+                    <h3>Add New Package</h3>
+                    <p>Package management form would go here...</p>
+                </div>
+            </div>
+
+            <div id="blog" class="admin-section">
+                <h2>Manage Blog Posts</h2>
+                <div class="form-container">
+                    <h3>Add New Blog Post</h3>
+                    <p>Blog management form would go here...</p>
+                </div>
+            </div>
+
+            <div id="comments" class="admin-section">
+                <h2>Manage Comments</h2>
+                <div class="table-container">
+                    <p>Comments management table would go here...</p>
+                </div>
+            </div>
+
+            <div id="bookings" class="admin-section">
+                <h2>Manage Bookings</h2>
+                <div class="table-container">
+                    <p>Bookings management table would go here...</p>
+                </div>
+            </div>
+
+            <div id="settings" class="admin-section">
+                <h2>Settings</h2>
+                <div class="form-container">
+                    <h3>Website Settings</h3>
+                    <p>Settings form would go here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
