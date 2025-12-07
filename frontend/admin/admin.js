@@ -1,7 +1,7 @@
 // Admin Panel JavaScript
 const ADMIN_API_BASE = 'http://localhost:5000/api/admin';
 
-// Simple admin authentication (in real app, use proper auth)
+// Simple admin authentication (=auth)
 const ADMIN_TOKEN = 'admin-secret-key';
 
 // Current admin state
@@ -31,20 +31,18 @@ async function adminApiCall(endpoint, options = {}) {
     }
 }
 
-// Show/hide sections
+
 function showSection(sectionId) {
-    // Hide all sections
+    
     document.querySelectorAll('.admin-section').forEach(section => {
         section.classList.remove('active');
     });
     
-    // Show selected section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
     }
     
-    // Update menu active state
     document.querySelectorAll('.admin-menu a').forEach(link => {
         link.classList.remove('active');
     });
