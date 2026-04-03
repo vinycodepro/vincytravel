@@ -1,22 +1,19 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Destination = require('../models/Destination');
-const Package = require('../models/Package');
-const Blog = require('../models/Blog');
-const Comment = require('../models/Comment');
-const Booking = require('../models/Booking');
+import Destination from '../models/Destination.js';
+import Package from '../models/Package.js';
+import Blog from '../models/Blog.js';
+import Comment from '../models/Comment.js';
+import Booking from '../models/Booking.js';
 
 // Admin authentication middleware (basic implementation)
 const adminAuth = (req, res, next) => {
-  // In a real app, you'd use JWT or sessions
-  const authHeader = req.headers.authorization;
-  if (authHeader === 'admin-secret-key') {
+  if (req.headers.authorization === 'admin-secret-key') {
     next();
   } else {
     res.status(401).json({ message: 'Unauthorized' });
   }
 };
-
 // Apply auth to all admin routes
 router.use(adminAuth);
 
@@ -24,6 +21,7 @@ router.use(adminAuth);
 router.post('/destinations', async (req, res) => {
   try {
     const destination = new Destination(req.body);
+    console.log('Creating destination with data:', req.body);
     await destination.save();
     res.status(201).json(destination);
   } catch (error) {
@@ -56,9 +54,9 @@ router.delete('/destinations/:id', async (req, res) => {
 // Package management
 router.post('/packages', async (req, res) => {
   try {
-    const package = new Package(req.body);
-    await package.save();
-    res.status(201).json(package);
+    const tourpackage = new Package(req.body);
+    await tourpackage.save();
+    res.status(201).json(tourpackage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -66,12 +64,12 @@ router.post('/packages', async (req, res) => {
 
 router.put('/packages/:id', async (req, res) => {
   try {
-    const package = await Package.findByIdAndUpdate(
+    const tourpackage = await Package.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    res.json(package);
+    res.json(tourpackage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -174,4 +172,4 @@ router.put('/bookings/:id/status', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

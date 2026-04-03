@@ -50,7 +50,6 @@ function scrollToSection(sectionId) {
     }
 }
 
-// API Functions
 async function apiCall(endpoint, options = {}) {
     try {
         const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -71,7 +70,6 @@ async function apiCall(endpoint, options = {}) {
         throw error;
     }
 }
-
 // Load Featured Destinations
 async function loadFeaturedDestinations() {
     try {

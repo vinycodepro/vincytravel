@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 const destinationSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -33,4 +32,6 @@ const destinationSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Destination', destinationSchema);
+const Destination = mongoose.model('Destination', destinationSchema);
+
+export default Destination;

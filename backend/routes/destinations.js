@@ -1,9 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Destination = require('../models/Destination');
+import Destination from '../models/Destination.js';
 
 // Get all destinations
 router.get('/', async (req, res) => {
+  console.log('Fetching all destinations');
+
   try {
     const destinations = await Destination.find().sort({ created_at: -1 });
     res.json(destinations);
@@ -14,6 +16,7 @@ router.get('/', async (req, res) => {
 
 // Get featured destinations
 router.get('/featured', async (req, res) => {
+  console.log('Fetching featured destinations');
   try {
     const destinations = await Destination.find({ featured: true }).limit(6);
     res.json(destinations);
@@ -24,6 +27,7 @@ router.get('/featured', async (req, res) => {
 
 // Get single destination
 router.get('/:id', async (req, res) => {
+  console.log(`Fetching destination with ID: ${req.params.id}`);
   try {
     const destination = await Destination.findById(req.params.id);
     if (!destination) {
@@ -35,4 +39,4 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

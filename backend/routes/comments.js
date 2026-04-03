@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express'
 const router = express.Router();
-const Comment = require('../models/Comment');
+import Comment from '../models/Comment.js';
 
 // Get approved comments for a page
 router.get('/:page', async (req, res) => {
@@ -26,4 +26,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

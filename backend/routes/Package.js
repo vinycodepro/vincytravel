@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Package = require('../models/Package');
+import Package from '../models/Package.js';
 
 // Get all packages
 router.get('/', async (req, res) => {
@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     res.json(packages);
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
+  }7
 });
 
 // Get featured packages
@@ -25,14 +25,14 @@ router.get('/featured', async (req, res) => {
 // Get single package
 router.get('/:id', async (req, res) => {
   try {
-    const package = await Package.findById(req.params.id).populate('destinations');
-    if (!package) {
+    const tourpackage = await Package.findById(req.params.id).populate('destinations');
+    if (!tourpackage) {
       return res.status(404).json({ message: 'Package not found' });
     }
-    res.json(package);
+    res.json(tourpackage);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-module.exports = router;
+export default router;
