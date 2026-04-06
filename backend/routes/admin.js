@@ -53,6 +53,7 @@ router.delete('/destinations/:id', async (req, res) => {
 
 // Package management
 router.post('/packages', async (req, res) => {
+  console.log("package data received:", req.body);
   try {
     const tourpackage = new Package(req.body);
     await tourpackage.save();
@@ -63,6 +64,7 @@ router.post('/packages', async (req, res) => {
 });
 
 router.put('/packages/:id', async (req, res) => {
+  console.log("Updating package with data:", req.body);
   try {
     const tourpackage = await Package.findByIdAndUpdate(
       req.params.id,
@@ -76,9 +78,20 @@ router.put('/packages/:id', async (req, res) => {
 });
 
 router.delete('/packages/:id', async (req, res) => {
+  console.log("Deleting package with ID:", req.params.id);
   try {
     await Package.findByIdAndDelete(req.params.id);
     res.json({ message: 'Package deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get all packages (MISSING ROUTE)
+router.get('/packages', async (req, res) => {
+  try {
+    const packages = await Package.find().sort({ created_at: -1 });
+    res.json(packages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -116,6 +129,16 @@ router.delete('/blog/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get('/blog', async (req, res) => {
+  try {
+    const blogs = await Blog.find().sort({ created_at: -1 });
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 // Comment management
 router.get('/comments', async (req, res) => {

@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
     const booking = new Booking(req.body);
     await booking.save();
     
-    // Here you would typically integrate with payment gateway
+    // Here i would typically integrate with payment gateway
     // For now, we'll just return the booking
     
     res.status(201).json(booking);
